@@ -8,17 +8,21 @@ the default policy from the leaf node’s state to a final state.
 4. Backpropagation - Passing the evaluation of a final state back up the tree, updating relevant data (see
 course lecture notes) at all nodes and edges on the path from the final state to the tree root.
 """
+import math
 
-class Node(object):
-    def __init__(self, data):
-        self.data = data
-        self.children = []
+class State(object):
+    def __init__(self):
+        self.actions = []
 
-        self.numerator = 0
-        self. denominator = 0
+        self.visited = 0
+        self.visited_success = 0
 
-    def add_child(self, obj):
-        self.children.append(obj)
+    def add_action(self, obj):
+        self.actions.append(obj)
+
+    def policy(self, visited, visited_success):
+        return
+
 
 
 class Stateman(object):
