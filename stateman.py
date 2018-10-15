@@ -9,6 +9,7 @@ the default policy from the leaf node’s state to a final state.
 course lecture notes) at all nodes and edges on the path from the final state to the tree root.
 """
 import math
+import random
 
 class Statemanager(object):
     # Litt uklart hva som skal ligge
@@ -48,7 +49,29 @@ class Node(object):
 
     def add_child(self, move, state):
         node = Node(move = move, parent = self, state = state)
+        self.untriedMoves.remove(node)
         self.childNodes.append(node)
 
-class UCT(object):
-    def __init__(self,data):
+    def select_child(self,move, state):
+        n = Node(move = move, parent = self, state = state)
+        self.untriedMoves.remove(move)
+        self.childNodes.append(n)
+
+def UCT(rootstate, itermax, verbose):
+    root = Node(state = rootstate)
+
+    for i in range(itermax):
+        node = root
+        state = rootstate
+
+        while node.untriedMoves == [] and node.childNodes != []:
+            node = node.UCTSelectChild()
+            state.DoAction(random.choice(state.Actions()))
+
+        if node.untriedMoves != []
+            move = random.choice(node.untriedMoves)
+            state.DoAction(move)
+            node = node.add_child(move, state)
+
+        while state.Actions() != []
+            state = node
