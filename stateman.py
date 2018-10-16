@@ -26,17 +26,18 @@ class NimGame(object):
         self.verbose_mode = verbose
 
 class NimState(object):
-    def __init__(self, chips, player_moved):
+    def __init__(self, P, chips, K):
         self.chips = chips
-        self.player_moved = player_moved
+        self.player_moved = P   # Determines which player stats (1/2)
+        self.K = K              # Maximum number of allowed chips to pick at once
 
-    def Actions(self, K, chips):
-        if chips >= K:
-            return [i for i in range(1,K+1)]
+    def Actions(self):
+        if self.chips >= self.K:
+            return [i for i in range(1,self.K+1)]
         else:
-            return [i for i in range(1,chips+1)]
+            return [i for i in range(1,self.chips+1)]
 
-    def Action(self,action):
+    def DoAction(self,action):
         self.chips -= action
 
     def get_result(self, player_moved):
@@ -72,7 +73,7 @@ class Node(object):
         self.wins += result
 
 def UCT(rootstate, itermax, verbose):
-    root = Node(state = rootstate)
+    root = Node(state = rootstate, parent = None, move = None)
 
     for i in range(itermax):
         node = root
@@ -94,18 +95,18 @@ def UCT(rootstate, itermax, verbose):
             node.update(state.get_result(node.player_moved))
             node = node.parentNode
 
-    if verbose == 1:
-        pass
+    #if verbose == 1:
+    #    pass
 
-def PlayGame():
-    state = NimState(15,2)
+def PlayGame(P,N,K):
+    state = NimState(P = P, chips = N, K =K)
     while len(state.Actions()) != 0:
         if state.player_moved == 1:
             move = UCT(rootstate=state, itermax=1000, verbose=False)
         else:
-            move = UCT(rootstate=state, itermax=100, verbose=False)
+            move = UCT(rootstate=state, itermax=1000, verbose=False)
         print("Best Move: " + str(move) + "\n")
-        state.Action(move)
+        state.DoAction(move)
     if state.get_result(state.player_moved) == 1.0:
         print("Player " + str(state.player_moved) + " wins!")
     elif state.get_result(state.player_moved) == 0.0:
@@ -113,4 +114,4 @@ def PlayGame():
     else:
         print("Nobody wins!")
 
-print(PlayGame())
+print(PlayGame(2,15,3))
