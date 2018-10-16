@@ -60,17 +60,18 @@ class Node(object):
 
     def add_child(self, move, state):
         node = Node(move = move, parent = self, state = state)
-        self.untriedMoves.remove(node)
+        self.untriedMoves.remove(move)
         self.childNodes.append(node)
 
-    def select_child(self,move, state):
-        n = Node(move = move, parent = self, state = state)
-        self.untriedMoves.remove(move)
-        self.childNodes.append(n)
+    def select_child(self):
+        s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + math.sqrt(2 * math.log(self.visits) / c.visits))[-1]
+        return s
 
     def update(self, result):
         self.visits += 1
         self.wins += result
+
+
 
 def UCT(rootstate, itermax, verbose):
     root = Node(state = rootstate, parent = None, move = None)
@@ -80,7 +81,7 @@ def UCT(rootstate, itermax, verbose):
         state = rootstate
 
         while len(node.untriedMoves) == 0 and len(node.childNodes) != 0:
-            node = node.UCTSelectChild()
+            node = node.select_child()
             state.DoAction(random.choice(state.Actions()))
 
         if len(node.untriedMoves) != 0:
