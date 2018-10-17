@@ -41,3 +41,21 @@ class Node:
     def __repr__(self):
         return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(
             self.untriedMoves) + "]"
+
+    def TreeToString(self, indent):
+        s = self.IndentString(indent) + str(self)
+        for c in self.childNodes:
+             s += c.TreeToString(indent+1)
+        return s
+
+    def IndentString(self,indent):
+        s = "\n"
+        for i in range (1,indent+1):
+            s += "| "
+        return s
+
+    def ChildrenToString(self):
+        s = ""
+        for c in self.childNodes:
+             s += str(c) + "\n"
+        return s
