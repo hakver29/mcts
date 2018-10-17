@@ -2,11 +2,6 @@ from Node import *
 from NimState import *
 from GameSetting import *
 
-import yaml
-from definitions import ROOT_DIR
-
-
-
 def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
         Return the best move from the rootstate.
@@ -45,14 +40,14 @@ def UCT(rootstate, itermax, verbose=False):
     return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
-def PlayGame(game_setting):
+def UCTPlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-
     player_wins = [0,0]
+    state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
     for i in range(game_setting.G):
-        state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
+        #state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
         while (state.GetMoves() != []):
             if state.playerJustMoved == 1:
                 m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
@@ -77,5 +72,6 @@ def PlayGame(game_setting):
 
 
     print(player_wins)
+
 game_setting = GameSetting()
-PlayGame(game_setting)
+UCTPlayGame(game_setting)

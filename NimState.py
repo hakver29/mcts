@@ -31,13 +31,15 @@ class NimState:
     def GetMoves(self):
         """ Get all possible moves from this state.
         """
+        """
         K = self.game_setting.K
 
         if K > self.stones_remaining:
             return [i for i in range(1, self.stones_remaining + 1)]
         else:
             return [i for i in range(1, K + 1)]
-
+        """
+        return [i for i in range(1, min([self.game_setting.K, self.stones_remaining + 1]))]
         # return [i for i in range(1, min([4, self.stones_remaining + 1]))]
 
     def GetResult(self, playerjm):
