@@ -10,7 +10,7 @@ class NimState:
         # self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
         # self.chips = ch
         self.stones_remaining = stones
-        self.playerJustMoved = 2
+        self.playerJustMoved = game_setting.P
         self.game_setting = game_setting
 
     def Clone(self):

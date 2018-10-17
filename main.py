@@ -36,7 +36,7 @@ def UCT(rootstate, itermax, verbose=False):
 
     # Output some information about the tree - can be omitted
     # Noe dritt man egentlig ikke trenger
-    print(root.ChildrenToString())
+    #print(root.ChildrenToString())
     return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 

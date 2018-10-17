@@ -6,7 +6,7 @@ class GameSetting:
         configfile = yaml.load(open(ROOT_DIR+"WhichSetting.yaml"))
         config = yaml.load(open(ROOT_DIR+configfile["filename"]))
         self.G = config["G"]
-        self.P = 2
+        self.P = config["P"]
         self.M = config["M"]
         self.N = config["N"]
         self.K = config["K"]
