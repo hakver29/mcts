@@ -1,10 +1,13 @@
+import yaml
+from definitions import ROOT_DIR
+
 class GameSetting:
-    def __init__(self, G=0, P=0, M=0, N=0, K=0, verbose=False):
-        self.G = G
-        self.P = P
-        self.M = M
-        self.N = N
-        self.K = K
-        self.verbose = verbose
-
-
+    def __init__(self):
+        configfile = yaml.load(open(ROOT_DIR+"WhichSetting.yaml"))
+        config = yaml.load(open(ROOT_DIR+configfile["filename"]))
+        self.G = config["G"]
+        self.P = config["P"]
+        self.M = config["M"]
+        self.N = config["N"]
+        self.K = config["K"]
+        self.verbose = config["verbose"]

@@ -1,3 +1,5 @@
+from math import *
+
 class Node:
     """ A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
         Crashes if state not specified.

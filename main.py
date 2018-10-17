@@ -1,11 +1,7 @@
-from math import *
 import random
 import Node
 import NimState
 import GameSetting
-
-
-
 
 def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
@@ -77,5 +73,5 @@ def UCTPlayGame(game_setting):
     elif state.GetResult(state.playerJustMoved) == 0.0:
         print("Player " + str(3 - state.playerJustMoved) + " wins")
 
-game_setting = GameSetting(5, 2, 1000, 15, 6, False)
+game_setting = GameSetting.GameSetting()
 UCTPlayGame(game_setting)
