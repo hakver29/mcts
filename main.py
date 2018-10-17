@@ -75,12 +75,12 @@ def UCTPlayGame(game_setting):
                     print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + "Stones remaining = " + str(
                         state.stones_remaining))
 
-        if state.GetResult(state.playerJustMoved) == 1.0:
-            print("Player " + str(state.playerJustMoved) + " wins")
-        elif state.GetResult(state.playerJustMoved) == 0.0:
-            print("Player " + str(3 - state.playerJustMoved) + " wins")
+        if game_setting.verbose == True:
+            if state.GetResult(state.playerJustMoved) == 1.0:
+                print("Player " + str(state.playerJustMoved) + " wins" + "\n")
+            elif state.GetResult(state.playerJustMoved) == 0.0:
+                print("Player " + str(3 - state.playerJustMoved) + " wins" + "\n")
 
-        print(state.playerJustMoved)
         player_wins[state.playerJustMoved - 1] += 1
 
 
