@@ -1,8 +1,6 @@
-from math import *
-import random
-import Node
-import NimState
-import GameSetting
+from Node import *
+from NimState import *
+from GameSetting import *
 
 
 
