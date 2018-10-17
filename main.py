@@ -62,10 +62,6 @@ class NimState:
         else:
             return 0.0  # playerjm's opponent took the last chip and has won
 
-    def __repr__(self):
-        s = "Stones:" + str(self.stones_remaining) + " JustPlayed:" + str(self.playerJustMoved)
-        return s
-
 
 class Node:
     """ A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
@@ -132,10 +128,10 @@ def UCT(rootstate, itermax, verbose=False):
         Return the best move from the rootstate.
         Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
 
-    rootnode = Node(state=rootstate)
+    root = Node(state=rootstate)
 
     for i in range(itermax):
-        node = rootnode
+        node = root
         state = rootstate.Clone()
 
         # Select
@@ -160,12 +156,14 @@ def UCT(rootstate, itermax, verbose=False):
             node = node.parentNode
 
     # Output some information about the tree - can be omitted
-    if (verbose):
-        print(rootnode.TreeToString(0))
+    # Noe dritt man egentlig ikke trenger
+    """
+    if (verbose == True):
+        print(root.TreeToString(0))
     else:
-        print(rootnode.ChildrenToString())
-
-    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
+        print(root.ChildrenToString())
+    """
+    return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
 def UCTPlayGame(G,P,M,N,K,verbose):
@@ -176,19 +174,30 @@ def UCTPlayGame(G,P,M,N,K,verbose):
     
     state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
     while (state.GetMoves() != []):
-        print(str(state))
+        #print(str(state))
+        #print("test")
         if state.playerJustMoved == 1:
             m = UCT(rootstate=state, itermax=M, verbose=verbose)  # play with values for itermax and verbose = True
         else:
             m = UCT(rootstate=state, itermax=M, verbose=verbose)
-        print("Best Move: " + str(m) + "\n")
+        #print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
+        if state.stones_remaining == 1 and m == 1:
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + str(state.stones_remaining) + " stone remaining.")
+        elif state.stones_remaining == 1:
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + str(
+                state.stones_remaining) + " stone remaining.")
+        elif m == 1:
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + str(
+                state.stones_remaining) + " stones remaining.")
+        else:
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + str(
+                state.stones_remaining) + " stones remaining.")
+
     if state.GetResult(state.playerJustMoved) == 1.0:
         print("Player " + str(state.playerJustMoved) + " wins!")
     elif state.GetResult(state.playerJustMoved) == 0.0:
         print("Player " + str(3 - state.playerJustMoved) + " wins!")
-    else:
-        print("Nobody wins!")
 
 
 if __name__ == "__main__":
