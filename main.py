@@ -2,7 +2,7 @@ from math import *
 import random
 
 class GameSetting:
-    def __init__(self, G, P, M, N, K, verbose):
+    def __init__(self, G = 0, P = 0, M = 0, N = 0, K = 0, verbose = False):
         self.G = G
         self.P = P
         self.M = M
@@ -166,41 +166,32 @@ def UCT(rootstate, itermax, verbose=False):
     return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
-def UCTPlayGame(G,P,M,N,K,verbose):
+def UCTPlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-    game_setting = GameSetting(G,P,M,N,K,verbose)
+    #game_setting = GameSetting(G,P,M,N,K,verbose)
     
     state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
     while (state.GetMoves() != []):
         #print(str(state))
         #print("test")
         if state.playerJustMoved == 1:
-            m = UCT(rootstate=state, itermax=M, verbose=verbose)  # play with values for itermax and verbose = True
+            m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
         else:
-            m = UCT(rootstate=state, itermax=M, verbose=verbose)
+            m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
         #print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
-        if state.stones_remaining == 1 and m == 1:
-            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + str(state.stones_remaining) + " stone remaining.")
-        elif state.stones_remaining == 1:
-            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + str(
-                state.stones_remaining) + " stone remaining.")
-        elif m == 1:
-            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + str(
-                state.stones_remaining) + " stones remaining.")
+        if m == 1:
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + "Stones remaining = " + str(state.stones_remaining))
         else:
-            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + str(
-                state.stones_remaining) + " stones remaining.")
+            print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + "Stones remaining = " + str(
+                state.stones_remaining))
 
     if state.GetResult(state.playerJustMoved) == 1.0:
-        print("Player " + str(state.playerJustMoved) + " wins!")
+        print("Player " + str(state.playerJustMoved) + " wins")
     elif state.GetResult(state.playerJustMoved) == 0.0:
-        print("Player " + str(3 - state.playerJustMoved) + " wins!")
+        print("Player " + str(3 - state.playerJustMoved) + " wins")
 
-
-if __name__ == "__main__":
-    """ Play a single game to the end using UCT for both players. 
-    """
-    UCTPlayGame(5, 2, 1000, 15, 6, False)
+game_setting = GameSetting(5, 2, 1000, 15, 6, False)
+UCTPlayGame(game_setting)
