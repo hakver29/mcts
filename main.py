@@ -55,10 +55,10 @@ def UCTPlayGame(game_setting):
         of UCT iterations (= simulations = tree nodes).
     """
     #game_setting = GameSetting(G,P,M,N,K,verbose)
-    
-    state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
+
     player_wins = [0,0]
     for i in range(game_setting.G):
+        state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
         while (state.GetMoves() != []):
             #print(str(state))
             #print("test")
@@ -68,11 +68,12 @@ def UCTPlayGame(game_setting):
                 m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
             #print("Best Move: " + str(m) + "\n")
             state.DoMove(m)
-            if m == 1:
-                print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + "Stones remaining = " + str(state.stones_remaining))
-            else:
-                print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + "Stones remaining = " + str(
-                    state.stones_remaining))
+            if game_setting.verbose == True:
+                if m == 1:
+                    print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + "Stones remaining = " + str(state.stones_remaining))
+                else:
+                    print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + "Stones remaining = " + str(
+                        state.stones_remaining))
 
         if state.GetResult(state.playerJustMoved) == 1.0:
             print("Player " + str(state.playerJustMoved) + " wins")
@@ -80,7 +81,8 @@ def UCTPlayGame(game_setting):
             print("Player " + str(3 - state.playerJustMoved) + " wins")
 
         print(state.playerJustMoved)
-        
+        player_wins[state.playerJustMoved - 1] += 1
+
 
     print(player_wins)
 game_setting = GameSetting()
