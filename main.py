@@ -1,7 +1,11 @@
+from math import *
 import random
 import Node
 import NimState
 import GameSetting
+
+
+
 
 def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
