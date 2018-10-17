@@ -18,6 +18,15 @@
 from math import *
 import random
 
+class GameSetting:
+    def __init__(self):
+        self.G = 1
+        self.P = 2
+        self.M = 100
+        self.N = 15
+        self.K = 4
+        self.verbose = True
+
 class NimState:
     """ A state of the game Nim. In Nim, players alternately take 1,2 or 3 chips with the
         winner being the player to take the last chip.
@@ -26,14 +35,15 @@ class NimState:
         Any initial state of the form 4n is a win for player 2.
     """
 
-    def __init__(self, ch):
+    def __init__(self, game_setting, ch):
         self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
         self.chips = ch
+        self.game_setting = game_setting
 
     def Clone(self):
         """ Create a deep clone of this game state.
         """
-        st = NimState(self.chips)
+        st = NimState(self.game_setting, self.chips)
         st.playerJustMoved = self.playerJustMoved
         return st
 
@@ -164,13 +174,13 @@ def UCT(rootstate, itermax, verbose=False):
     return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
-def UCTPlayGame():
+def UCTPlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
     # state = OthelloState(4) # uncomment to play Othello on a square board of the given size
     # state = OXOState() # uncomment to play OXO
-    state = NimState(15)  # uncomment to play Nim with the given number of starting chips
+    state = NimState(game_setting, 15)  # uncomment to play Nim with the given number of starting chips
     while (state.GetMoves() != []):
         print(str(state))
         if state.playerJustMoved == 1:
@@ -190,4 +200,5 @@ def UCTPlayGame():
 if __name__ == "__main__":
     """ Play a single game to the end using UCT for both players. 
     """
-    UCTPlayGame()
+    game_setting = GameSetting()
+    UCTPlayGame(game_setting)

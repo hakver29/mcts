@@ -6,17 +6,17 @@ class NimState:
         Any initial state of the form 4n is a win for player 2.
     """
 
-    def __init__(self, game_setting):
+    def __init__(self, game_setting, stones):
         # self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
         # self.chips = ch
-        self.stones_remaining = game_setting.N
-        self.playerJustMoved = game_setting.P
+        self.stones_remaining = stones
+        self.playerJustMoved = 2
         self.game_setting = game_setting
 
     def Clone(self):
         """ Create a deep clone of this game state.
         """
-        st = NimState(self.game_setting)
+        st = NimState(self.game_setting, self.stones_remaining)
         st.playerJustMoved = self.playerJustMoved
         return st
 
