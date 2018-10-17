@@ -41,27 +41,19 @@ def UCT(rootstate, itermax, verbose=False):
 
     # Output some information about the tree - can be omitted
     # Noe dritt man egentlig ikke trenger
-    """
-    if (verbose == True):
-        print(root.TreeToString(0))
-    else:
-        print(root.ChildrenToString())
-    """
+    print(root.ChildrenToString())
     return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
-def UCTPlayGame(game_setting):
+def PlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-    #game_setting = GameSetting(G,P,M,N,K,verbose)
 
     player_wins = [0,0]
     for i in range(game_setting.G):
         state = NimState(game_setting)  # uncomment to play Nim with the given number of starting stones
         while (state.GetMoves() != []):
-            #print(str(state))
-            #print("test")
             if state.playerJustMoved == 1:
                 m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
             else:
@@ -86,4 +78,4 @@ def UCTPlayGame(game_setting):
 
     print(player_wins)
 game_setting = GameSetting()
-UCTPlayGame(game_setting)
+PlayGame(game_setting)
