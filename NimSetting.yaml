@@ -1,6 +1,6 @@
-G:
-P:
-K:
-N:
-M:
+G: 50
+P: 2
+K: 5
+N: 15
+M: 100
 verbose: True
