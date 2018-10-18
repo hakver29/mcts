@@ -7,10 +7,10 @@ def UCT(rootstate, itermax, verbose=False):
         Return the best move from the rootstate.
         Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
 
-    root = Node(state=rootstate)
+    rootnode = Node(state=rootstate)
 
     for i in range(itermax):
-        node = root
+        node = rootnode
         state = rootstate.Clone()
 
         # Select
@@ -22,11 +22,11 @@ def UCT(rootstate, itermax, verbose=False):
         if node.untriedMoves != []:  # if we can expand (i.e. state/node is non-terminal)
             m = random.choice(node.untriedMoves)
             state.DoMove(m)
-            node = node.AddChild(m, state)  # add child and descend tree
+            node = node.add_child(m, state)  # add child and descend tree
 
         # Rollout - this can often be made orders of magnitude quicker using a state.GetRandomMove() function
-        while state.GetMoves() != []:  # while state is non-terminal
-            state.DoMove(random.choice(state.GetMoves()))
+        while state.get_moves() != []:  # while state is non-terminal
+            state.DoMove(random.choice(state.get_moves()))
 
         # Backpropagate
         while node != None:  # backpropagate from the expanded node and work back to the root node
@@ -37,18 +37,18 @@ def UCT(rootstate, itermax, verbose=False):
     # Output some information about the tree - can be omitted
     # Noe dritt man egentlig ikke trenger
     if game_setting.verbose == True:
-        print(root.ChildrenToString())
-    return sorted(root.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
+        print(rootnode.ChildrenToString())
+    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
-def UCTPlayGame(game_setting):
+def PlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
     player_wins = [0,0]
     for i in range(game_setting.G):
         state = NimState(game_setting,game_setting.N)  # uncomment to play Nim with the given number of starting stones
-        while (state.GetMoves() != []):
+        while (state.get_moves() != []):
             if state.playerJustMoved == 1:
                 m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
             else:
@@ -74,4 +74,4 @@ def UCTPlayGame(game_setting):
     print(player_wins)
 
 game_setting = GameSetting()
-UCTPlayGame(game_setting)
+PlayGame(game_setting)

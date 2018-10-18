@@ -28,7 +28,7 @@ class NimState:
         self.stones_remaining -= move
         self.playerJustMoved = 3 - self.playerJustMoved
 
-    def GetMoves(self):
+    def get_moves(self):
         """ Get all possible moves from this state.
         """
         K = self.game_setting.K

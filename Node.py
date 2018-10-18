@@ -12,7 +12,7 @@ class Node:
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = state.GetMoves()  # future child nodes
+        self.untriedMoves = state.get_moves()  # future child nodes
         self.playerJustMoved = state.playerJustMoved  # the only part of the state that the Node needs later
 
     def UCTSelectChild(self):
@@ -23,7 +23,7 @@ class Node:
         s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
         return s
 
-    def AddChild(self, m, s):
+    def add_child(self, m, s):
         """ Remove m from untriedMoves and add a new child node for this move.
             Return the added child node
         """
@@ -37,18 +37,6 @@ class Node:
         """
         self.visits += 1
         self.wins += result
-
-    def TreeToString(self, indent):
-        s = self.IndentString(indent) + str(self)
-        for c in self.childNodes:
-             s += c.TreeToString(indent+1)
-        return s
-
-    def IndentString(self,indent):
-        s = "\n"
-        for i in range (1,indent+1):
-            s += "| "
-        return s
 
     def ChildrenToString(self):
         s = ""
