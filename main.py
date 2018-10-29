@@ -28,14 +28,13 @@ def UCT(rootstate, itermax, verbose=False):
         while state.get_moves() != []:  # while state is non-terminal
             state.DoMove(random.choice(state.get_moves()))
 
-        # Backpropagate
+        # Backpropagering
         while node != None:  # backpropagate from the expanded node and work back to the root node
             node.Update(state.GetResult(
                 node.playerJustMoved))  # state is terminal. Update node with result from POV of node.playerJustMoved
             node = node.parentNode
 
-    # Output some information about the tree - can be omitted
-    # Noe dritt man egentlig ikke trenger
+    # Printer informasjon om rollout
     if game_setting.verbose == True:
         print(rootnode.ChildrenToString())
     return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
@@ -44,22 +43,23 @@ def UCT(rootstate, itermax, verbose=False):
 def PlayGame(game_setting):
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
+
+        Spiller et enkelt spill mellom to spillere
     """
     player_wins = [0,0]
     for i in range(game_setting.G):
         state = NimState(game_setting,game_setting.N)  # uncomment to play Nim with the given number of starting stones
         while (state.get_moves() != []):
             if state.playerJustMoved == 1:
-                m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
+                move = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
             else:
-                m = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
-            #print("Best Move: " + str(m) + "\n")
-            state.DoMove(m)
+                move = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
+            state.DoMove(move)
             if game_setting.verbose == True:
-                if m == 1:
-                    print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stone. " + "Stones remaining = " + str(state.stones_remaining))
+                if move == 1:
+                    print("Player " + str(state.playerJustMoved) + " selects " + str(move) + " stone. " + "Stones remaining = " + str(state.stones_remaining))
                 else:
-                    print("Player " + str(state.playerJustMoved) + " selects " + str(m) + " stones. " + "Stones remaining = " + str(
+                    print("Player " + str(state.playerJustMoved) + " selects " + str(move) + " stones. " + "Stones remaining = " + str(
                         state.stones_remaining))
 
         if game_setting.verbose == True:

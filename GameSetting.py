@@ -1,3 +1,14 @@
+"""
+Generell input for spillet.
+
+G: Antall spill som skal spilles
+P: Spiller som starter
+K: Maksimalt antall steiner det er mulig å velge hver runde
+N: Antallet steiner man starter med
+M: Antall simulasjoner
+verbose: True
+"""
+
 import yaml
 from definitions import ROOT_DIR
 

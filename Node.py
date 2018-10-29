@@ -45,5 +45,4 @@ class Node:
         return s
 
     def __repr__(self):
-        return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(
-            self.untriedMoves) + "]"
+        return "[Move: " + str(self.move) + ", Wins/Visits: " + str(int(self.wins)) + "/" + str(int(self.visits)) + "]"
