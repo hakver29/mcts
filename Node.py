@@ -2,7 +2,7 @@ from math import *
 import random
 
 class Node:
-    """ A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
+    """ A node in the game tree. Note wins is always from the viewpoint of player_just_moved.
         Crashes if state not specified.
     """
 
@@ -12,33 +12,40 @@ class Node:
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = state.get_moves()  # future child nodes
-        self.playerJustMoved = state.playerJustMoved  # the only part of the state that the Node needs later
+        self.untried_moves = state.get_moves()  # child nodes
+        self.player_just_moved = state.player_just_moved
 
-    def UCTSelectChild(self):
-        """ Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
-            lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
-            exploration versus exploitation.
+    def select_child(self):
         """
-        s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
+        Heuristikk hentet fra https://en.wikipedia.org/wiki/Monte_Carlo_tree_search
+        
+        c.wins stands for the number of wins for the node considered after the i-th move
+        c.visits stands for the number of simulations for the node considered after the i-th move
+        self.visits stands for the total number of simulations after the i-th move
+        """
+        s = max(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))
         return s
 
     def add_child(self, m, s):
-        """ Remove m from untriedMoves and add a new child node for this move.
+        """ Remove m from untried_moves and add a new child node for this move.
             Return the added child node
         """
         n = Node(move=m, parent=self, state=s)
-        self.untriedMoves.remove(m)
+        self.untried_moves.remove(m)
         self.childNodes.append(n)
         return n
 
-    def Update(self, result):
-        """ Update this node - one additional visit and result additional wins. result must be from the viewpoint of playerJustmoved.
+    def update(self, result):
+        """
+        Oppdaterer antallet visits og wins på en node
         """
         self.visits += 1
         self.wins += result
 
-    def ChildrenToString(self):
+    def children_to_string(self):
+        """
+        Brukes for å gi kontinuerlig statistikk om rollout-prosessen underveis i spillet.
+        """
         s = ""
         for c in self.childNodes:
              s += str(c) + "\n"
