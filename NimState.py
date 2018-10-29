@@ -36,7 +36,8 @@ class NimState:
             return [i for i in range(1, K + 1)]
 
     def get_result(self, playerjm):
-        """ Get the game result from the viewpoint of playerjm.
+        """
+        Returnerer resultatet fra playerjm sitt ståsted
         """
         assert self.stones_remaining == 0
         if self.player_just_moved == playerjm:

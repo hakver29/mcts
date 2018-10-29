@@ -2,7 +2,7 @@ from Node import *
 from NimState import *
 from GameSetting import *
 
-def UCT(rootstate, itermax, verbose=False):
+def tree_search(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
         Return the best move from the rootstate.
         Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
@@ -30,8 +30,7 @@ def UCT(rootstate, itermax, verbose=False):
 
         # Backpropagering
         while node != None:  # backpropagate from the expanded node and work back to the root node
-            node.update(state.get_result(
-                node.player_just_moved))  # state is terminal. Update node with result from POV of node.player_just_moved
+            node.update(state.get_result(node.player_just_moved))  # state is terminal. Update node with result from POV of node.player_just_moved
             node = node.parentNode
 
     # Printer informasjon om rollout
@@ -48,12 +47,12 @@ def play_game(game_setting):
     """
     player_wins = [0,0]
     for i in range(game_setting.G):
-        state = NimState(game_setting,game_setting.N)  # uncomment to play Nim with the given number of starting stones
+        state = NimState(game_setting,game_setting.N)
         while (state.get_moves() != []):
             if state.player_just_moved == 1:
-                move = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
+                move = tree_search(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)  # play with values for itermax and verbose = True
             else:
-                move = UCT(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
+                move = tree_search(rootstate = state, itermax = game_setting.M, verbose = game_setting.verbose)
             state.do_move(move)
             if game_setting.verbose == True:
                 if move == 1:
