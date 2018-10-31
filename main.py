@@ -3,37 +3,42 @@ from NimState import *
 from GameSetting import *
 
 def tree_search(rootstate, itermax, verbose=False):
-    """ Conduct a UCT search for itermax iterations starting from rootstate.
-        Return the best move from the rootstate.
-        Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
-
     rootnode = Node(state=rootstate)
 
     for i in range(itermax):
         node = rootnode
         state = rootstate.clone()
 
-        # Select
-        while node.untried_moves == [] and node.childNodes != []:  # node is fully expanded and non-terminal
+        """
+        Selection: start from root R and select successive child nodes until a leaf node L is reached. The root is the current game state and a leaf is any node from which no simulation (playout) has yet been initiated. The section below says more about a way of biasing choice of child nodes that lets the game tree expand towards the most promising moves, which is the essence of Monte Carlo tree search.
+        
+        Expansion: unless L ends the game decisively (e.g. win/loss/draw) for either player, create one (or more) child nodes and choose node C from one of them. Child nodes are any valid moves from the game position defined by L.
+        
+        Simulation: complete one random playout from node C. This step is sometimes also called playout or rollout. A playout may be as simple as choosing uniform random moves until the game is decided (for example in chess, the game is won, lost, or drawn).
+        
+        Backpropagation: use the result of the playout to update information in the nodes on the path from C to R.
+        """
+
+        # Selection
+        while node.untried_moves == [] and node.childNodes != []:
             node = node.select_child()
             state.do_move(node.move)
 
-        # Expand
-        if node.untried_moves != []:  # if we can expand (i.e. state/node is non-terminal)
+        # Expansion
+        if node.untried_moves != []:
             moves = random.choice(node.untried_moves)
             state.do_move(moves)
             node = node.add_child(moves, state)  # add child and descend tree
 
-        # Rollout - this can often be made orders of magnitude quicker using a state.GetRandomMove() function
+        # Simulation
         while state.get_moves() != []:  # while state is non-terminal
             state.do_move(random.choice(state.get_moves()))
 
-        # Backpropagering
-        while node != None:  # backpropagate from the expanded node and work back to the root node
-            node.update(state.get_result(node.player_just_moved))  # state is terminal. Update node with result from POV of node.player_just_moved
+        # Backpropagation
+        while node != None:
+            node.update(state.get_result(node.player_just_moved))
             node = node.parentNode
 
-    # Printer informasjon om rollout
     if game_setting.verbose == True:
         print(rootnode.children_to_string())
     return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
