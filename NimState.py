@@ -2,8 +2,6 @@ class NimState:
     # Representerer en tilstand av Nim. NimState tar inn spillets regler og antall steiner som er gjenværende.
 
     def __init__(self, game_setting, stones):
-        # self.player_just_moved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
-        # self.chips = ch
         self.stones_remaining = stones
         self.player_just_moved = game_setting.P
         self.game_setting = game_setting
@@ -41,6 +39,6 @@ class NimState:
         """
         assert self.stones_remaining == 0
         if self.player_just_moved == playerjm:
-            return 1.0  # playerjm took the last chip and has won
+            return 1.0
         else:
-            return 0.0  # playerjm's opponent took the last chip and has won
+            return 0.0
