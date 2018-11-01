@@ -28,10 +28,10 @@ def tree_search(rootstate, itermax, verbose=False):
         if node.untried_moves != []:
             moves = random.choice(node.untried_moves)
             state.do_move(moves)
-            node = node.add_child(moves, state)  # add child and descend tree
+            node = node.add_child(moves, state)
 
         # Simulation
-        while state.get_moves() != []:  # while state is non-terminal
+        while state.get_moves() != []:
             state.do_move(random.choice(state.get_moves()))
 
         # Backpropagation
@@ -41,7 +41,7 @@ def tree_search(rootstate, itermax, verbose=False):
 
     if game_setting.verbose == True:
         print(rootnode.children_to_string())
-    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
+    return max(rootnode.childNodes, key=lambda c: c.visits).move
 
 
 def play_game(game_setting):
